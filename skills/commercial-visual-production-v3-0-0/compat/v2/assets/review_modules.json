@@ -1,0 +1,360 @@
+{
+  "schema": "cvisual.review.definitions.v1",
+  "modules": [
+    {
+      "id": "R0",
+      "name": "素材/参考权限",
+      "goal": "区别哪张负责构图、身份、产品、建筑和色彩；记录禁止重绘的原件",
+      "checks": [
+        {
+          "id": "R0.roles",
+          "name": "参考图角色分权",
+          "evidence": "参考图清单，每张仅承担明确角色",
+          "affects": [
+            "R1.composition",
+            "R1.typography",
+            "R1.palette",
+            "R3.real_assets"
+          ]
+        },
+        {
+          "id": "R0.assets",
+          "name": "真实人物、产品与品牌素材",
+          "evidence": "源图路径、授权/版本、L0/L1属性",
+          "affects": [
+            "R3.real_assets",
+            "R6.identity_product"
+          ]
+        },
+        {
+          "id": "R0.scope",
+          "name": "生产目标与交付约束",
+          "evidence": "尺寸、场景、必含/禁用项、交付格式",
+          "affects": [
+            "R1.forbidden",
+            "R2.bounds",
+            "R3.task_split",
+            "R6.file_check"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R1",
+      "name": "参考视觉解码",
+      "goal": "针对真实参考记录构图、字体、色彩、留白、剪切、层级，不以形容词替代测量",
+      "checks": [
+        {
+          "id": "R1.composition",
+          "name": "构图方向与主体空间",
+          "evidence": "参考网格截图和主体边界/依据",
+          "affects": [
+            "R2.bounds",
+            "R3.preview",
+            "R5.fidelity"
+          ]
+        },
+        {
+          "id": "R1.hierarchy",
+          "name": "焦点与信息层级",
+          "evidence": "一/二/三级焦点及视觉面积",
+          "affects": [
+            "R2.depth",
+            "R3.preview",
+            "R5.fidelity"
+          ]
+        },
+        {
+          "id": "R1.typography",
+          "name": "字形、版式与透视",
+          "evidence": "参考中标题字宽、行距、角度、轴线",
+          "affects": [
+            "R2.bounds",
+            "R3.type_plan",
+            "R5.fidelity"
+          ]
+        },
+        {
+          "id": "R1.whitespace",
+          "name": "留白形态与负空间",
+          "evidence": "留白区域框及与主体的关系",
+          "affects": [
+            "R2.bounds",
+            "R3.preview",
+            "R5.fidelity"
+          ]
+        },
+        {
+          "id": "R1.cutting",
+          "name": "剪切、遮挡和窗口规则",
+          "evidence": "遮挡示意、剪切窗口比例与关系",
+          "affects": [
+            "R2.depth",
+            "R3.preview",
+            "R5.fidelity"
+          ]
+        },
+        {
+          "id": "R1.palette",
+          "name": "颜色关系与面积",
+          "evidence": "可见色块来源与品牌优先级说明",
+          "affects": [
+            "R3.preview",
+            "R6.color"
+          ]
+        },
+        {
+          "id": "R1.forbidden",
+          "name": "可迁移语法与禁用项",
+          "evidence": "必须保留的结构、不复制的装饰/品牌",
+          "affects": [
+            "R3.task_split",
+            "R4.target",
+            "R5.fidelity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R2",
+      "name": "结构蓝图和预检",
+      "goal": "把分析转成归一化布局、z层级和实质不可编辑区约束",
+      "checks": [
+        {
+          "id": "R2.bounds",
+          "name": "坐标、比例和边界",
+          "evidence": "blueprint.json + blueprint_guide.png",
+          "affects": [
+            "R3.preview",
+            "R4.target",
+            "R5.geometry"
+          ]
+        },
+        {
+          "id": "R2.depth",
+          "name": "遮挡与人物层级",
+          "evidence": "z轴/层级关系、元素间约束",
+          "affects": [
+            "R3.preview",
+            "R5.geometry"
+          ]
+        },
+        {
+          "id": "R2.mask",
+          "name": "保护与可编辑区域",
+          "evidence": "mask_protected.png / mask_editable.png",
+          "affects": [
+            "R4.mask",
+            "R4.lock"
+          ]
+        },
+        {
+          "id": "R2.preflight",
+          "name": "蓝图程序校验",
+          "evidence": "artifacts/preflight.json 的 PASS 记录",
+          "auto_report": "preflight.json",
+          "pass_values": [
+            "PASS"
+          ],
+          "affects": [
+            "R3.preview",
+            "R4.mask"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "结构预览与生产转译",
+      "goal": "确认草图后才进入视觉生成；分离真实资产、可编辑字体与AI背景",
+      "checks": [
+        {
+          "id": "R3.preview",
+          "name": "低细节预览符合参考",
+          "evidence": "layout_preview.png 与参考并列人工确认",
+          "affects": [
+            "R4.target",
+            "R5.fidelity"
+          ]
+        },
+        {
+          "id": "R3.real_assets",
+          "name": "人物产品与Logo原素材路径",
+          "evidence": "素材文件路径、合成策略，严禁重绘L0",
+          "affects": [
+            "R4.target",
+            "R6.identity_product",
+            "R6.layers"
+          ]
+        },
+        {
+          "id": "R3.type_plan",
+          "name": "可编辑字体与文字方案",
+          "evidence": "字体来源、真实文本和相对位置",
+          "affects": [
+            "R5.fidelity",
+            "R6.brand_copy"
+          ]
+        },
+        {
+          "id": "R3.task_split",
+          "name": "生成/抠图/合成任务拆分",
+          "evidence": "production_contract.md + prompts 文件",
+          "affects": [
+            "R4.target"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R4",
+      "name": "候选生成与硬锁编辑",
+      "goal": "只在被批准的地方修改；保留原件并记录版本基线",
+      "checks": [
+        {
+          "id": "R4.target",
+          "name": "生成结果完成指定目标",
+          "evidence": "候选图、生成任务及基准版本",
+          "affects": [
+            "R5.geometry",
+            "R5.fidelity",
+            "R5.non_target",
+            "R6.identity_product",
+            "R6.brand_copy",
+            "R6.color",
+            "R6.quality",
+            "R6.layers",
+            "R6.file_check"
+          ]
+        },
+        {
+          "id": "R4.mask",
+          "name": "本轮编辑掩膜与保护范围",
+          "evidence": "编辑掩膜和保护掩膜，确认无冲突",
+          "affects": [
+            "R4.lock",
+            "R5.non_target"
+          ]
+        },
+        {
+          "id": "R4.lock",
+          "name": "非编辑区像素硬锁",
+          "evidence": "artifacts/locked_edit.report.json；新创作阶段可说明不适用",
+          "auto_report": "locked_edit.report.json",
+          "pass_values": [
+            "PASS"
+          ],
+          "allow_na": true,
+          "affects": [
+            "R5.non_target"
+          ],
+          "auto_alternates": [
+            "locked.report.json"
+          ]
+        },
+        {
+          "id": "R4.version",
+          "name": "基准版本与变更记录",
+          "evidence": "已确认版、修改版、回退入口",
+          "affects": [
+            "R5.non_target",
+            "R6.file_check"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R5",
+      "name": "参考忠实度与版本复核",
+      "goal": "核实并非只是风格相似，结构、留白、遮挡及非目标区均符合已确认规则",
+      "checks": [
+        {
+          "id": "R5.geometry",
+          "name": "几何约束程序审查",
+          "evidence": "artifacts/layout_audit.json 的 PASS 记录；须有真实画面标注",
+          "auto_report": "layout_audit.json",
+          "pass_values": [
+            "PASS"
+          ],
+          "affects": [
+            "R6.file_check"
+          ]
+        },
+        {
+          "id": "R5.fidelity",
+          "name": "参考设计语法人工复核",
+          "evidence": "参考/当前版对照：层级、留白、字体、剪切",
+          "affects": [
+            "R6.quality"
+          ]
+        },
+        {
+          "id": "R5.non_target",
+          "name": "非目标区域变化复核",
+          "evidence": "差异图、保护区变化比例、人工查看",
+          "allow_na": true,
+          "affects": [
+            "R6.quality"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R6",
+      "name": "商业质量与分层交付",
+      "goal": "确保人物与产品真实、文字和品牌正确，并核验可打开的交付文件",
+      "checks": [
+        {
+          "id": "R6.identity_product",
+          "name": "真实人物产品Logo保真",
+          "evidence": "与原素材逐项对照、球衣/标签/五官",
+          "affects": []
+        },
+        {
+          "id": "R6.brand_copy",
+          "name": "文字内容、Logo和字体准确",
+          "evidence": "客户确认文案、官方标识源文件、字形核对",
+          "affects": []
+        },
+        {
+          "id": "R6.color",
+          "name": "品牌色数值与色彩空间",
+          "evidence": "artifacts/pixel_audit.json 或软件色彩证据",
+          "auto_report": "pixel_audit.json",
+          "pass_values": [
+            "PASS"
+          ],
+          "allow_na": true,
+          "affects": []
+        },
+        {
+          "id": "R6.quality",
+          "name": "脏污、色带、边缘与真实结构",
+          "evidence": "100%/200%细节检查记录",
+          "affects": []
+        },
+        {
+          "id": "R6.layers",
+          "name": "分层文件一致性",
+          "evidence": "绑定当前母版的 layer_export_report.json，且 approved_composite_match=true；ORA为栅格分层，需目标编辑器打开验证",
+          "auto_report": "layer_export_report.json",
+          "pass_values": [
+            "RENDERABLE"
+          ],
+          "allow_na": true,
+          "affects": [],
+          "auto_alternates": [
+            "layers/layer_export_report.json"
+          ]
+        },
+        {
+          "id": "R6.file_check",
+          "name": "尺寸、打开、交付资产清单",
+          "evidence": "软件打开验证、格式、尺寸、合成一致性",
+          "affects": []
+        }
+      ]
+    }
+  ],
+  "version": "2.2.0"
+}

@@ -1,0 +1,183 @@
+{
+  "project_id": "DEMO-NOT-REAL-REFERENCE-MEASUREMENTS",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "background": "#005EAD"
+  },
+  "reference_roles": [
+    {
+      "id": "visual-reference-01",
+      "role": "composition",
+      "priority": 1,
+      "status": "example-only",
+      "apply": [
+        "grouping",
+        "whitespace",
+        "title hierarchy"
+      ]
+    },
+    {
+      "id": "identity-reference-02",
+      "role": "identity",
+      "priority": 1,
+      "status": "example-only",
+      "apply": [
+        "identity only, from actual source"
+      ]
+    }
+  ],
+  "rules": {
+    "safe_margin": 0.02,
+    "deny_extra_subjects": true,
+    "no_noise_or_unrequested_splash": true
+  },
+  "elements": [
+    {
+      "id": "coach",
+      "role": "coach",
+      "box": [
+        0.1,
+        0.13,
+        0.4,
+        0.45
+      ],
+      "z": 30,
+      "lock": "L0",
+      "fit": "contain",
+      "anchor": "bottom",
+      "required": true
+    },
+    {
+      "id": "support_player",
+      "role": "person",
+      "box": [
+        0.56,
+        0.3,
+        0.29,
+        0.26
+      ],
+      "z": 25,
+      "lock": "L0",
+      "fit": "contain",
+      "anchor": "bottom",
+      "required": true
+    },
+    {
+      "id": "negative_space_1",
+      "role": "negative_space",
+      "box": [
+        0.58,
+        0.1,
+        0.3,
+        0.16
+      ],
+      "z": 5,
+      "lock": "L3",
+      "fit": "contain",
+      "required": true
+    },
+    {
+      "id": "headline",
+      "role": "headline",
+      "box": [
+        0.12,
+        0.67,
+        0.76,
+        0.11
+      ],
+      "z": 35,
+      "lock": "L0",
+      "fit": "contain",
+      "required": true,
+      "content": "水到 兴起 (PLACEHOLDER ONLY)"
+    },
+    {
+      "id": "product",
+      "role": "product",
+      "box": [
+        0.4,
+        0.81,
+        0.2,
+        0.14
+      ],
+      "z": 40,
+      "lock": "L0",
+      "fit": "contain",
+      "required": true
+    }
+  ],
+  "constraints": [
+    {
+      "id": "coach_dominant",
+      "type": "min_area_ratio",
+      "a": "coach",
+      "b": "support_player",
+      "ratio": 1.7
+    },
+    {
+      "id": "people_separate",
+      "type": "nonoverlap",
+      "a": "coach",
+      "b": "support_player"
+    },
+    {
+      "id": "text_above_product",
+      "type": "above",
+      "a": "headline",
+      "b": "product",
+      "tolerance": 0.01
+    }
+  ],
+  "editable_regions": [
+    {
+      "id": "right-background-edit-only",
+      "rect": [
+        0.9,
+        0.8,
+        0.98,
+        0.97
+      ]
+    }
+  ],
+  "protected_regions": [
+    {
+      "id": "upper-locked",
+      "rect": [
+        0.0,
+        0.0,
+        1.0,
+        0.79
+      ]
+    }
+  ],
+  "creative_direction": "示例：纯净几何体育广告背景，保留明确留白。仅测试工序，不代表用户项目实际构图。",
+  "style_rules": [
+    "统一黑体系统由后期可编辑文字完成",
+    "大面积干净纯色，几何结构克制"
+  ],
+  "forbidden_elements": [
+    "禁止额外水花",
+    "禁止噪点与长笔触",
+    "不增加非指定人物",
+    "不重新绘制产品标签"
+  ],
+  "color_checks": [
+    {
+      "id": "flat_blue_whitespace_example",
+      "rect": [
+        0.62,
+        0.12,
+        0.83,
+        0.22
+      ],
+      "expected_hex": "#005EAD",
+      "tolerance": 0,
+      "min_match_ratio": 1.0
+    }
+  ],
+  "color_management": {
+    "working_space": "sRGB",
+    "assume_untagged_srgb": true
+  }
+}

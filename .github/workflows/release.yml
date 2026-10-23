@@ -1,0 +1,45 @@
+name: Publish V3.0.0
+
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/release.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PYTHONUTF8: "1"
+  PYTHONDONTWRITEBYTECODE: "1"
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -r requirements.txt
+      - name: Verify V3 (54 tests)
+        working-directory: skills/commercial-visual-production-v3-0-0
+        run: python -m unittest discover -s tests -q
+      - name: Verify isolated V2 compatibility (70 tests)
+        working-directory: skills/commercial-visual-production-v3-0-0/compat/v2
+        run: python -m unittest discover -s tests -q
+      - name: Package verified sources and documentation
+        run: python tools/package_release.py
+      - name: Publish immutable V3.0.0 release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release view v3.0.0 --json tagName 2>$null
+          if ($LASTEXITCODE -eq 0) { Write-Output "Release already exists; preserving it."; exit 0 }
+          gh release create v3.0.0 dist/commercial-visual-production-v3-0-0.zip dist/SHA256SUMS.txt --target $env:GITHUB_SHA --title "Commercial Visual Production Skill V3.0.0 / 商业视觉生产技能" --notes-file CHANGELOG.md
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+env:
+  PYTHONUTF8: "1"
+  PYTHONDONTWRITEBYTECODE: "1"
+
 jobs:
   regression:
     runs-on: windows-latest

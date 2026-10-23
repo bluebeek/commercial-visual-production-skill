@@ -20,6 +20,8 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Preserve exact source bytes
+        run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:

@@ -11,7 +11,7 @@ def main():
     ap.add_argument("--samples")
     a=ap.parse_args()
     repo=Path(__file__).resolve().parents[1]
-    scripts=repo/"skills/commercial-visual-production-v3-0-0/scripts"
+    scripts=repo/"skills/commercial-visual-production-v3-1-0/scripts"
     sys.path.insert(0,str(scripts))
     from ora_verify import read_ora
     from export_layers import main as export_main

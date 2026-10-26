@@ -8,7 +8,7 @@ def main():
     a=p.parse_args()
     repo=Path(__file__).resolve().parents[1]
     out=Path(a.out).resolve();out.mkdir(parents=True,exist_ok=True)
-    skill=repo/"skills/commercial-visual-production-v3-0-0"
+    skill=repo/"skills/commercial-visual-production-v3-1-0"
     env=dict(os.environ,PYTHONUTF8="1",PYTHONDONTWRITEBYTECODE="1")
     results=[]
     for name,cwd in (("v3",skill),("v2",skill/"compat/v2")):

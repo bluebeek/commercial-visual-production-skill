@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0",
+  "version": "3.1.0",
   "files": [
     {
       "path": "compat/v2/assets/blueprint.example.json",
@@ -158,13 +158,18 @@
     },
     {
       "path": "references/execution.md",
-      "bytes": 5976,
-      "sha256": "3b4b17c14be350be14b0595eb4852e89004e91b12831379eb16679e1fbdc807c"
+      "bytes": 6297,
+      "sha256": "0dc227321efd2322ee24a420d07eee96394f3e33f74ea543cddcd6ad3819389b"
+    },
+    {
+      "path": "references/photocraft.md",
+      "bytes": 5000,
+      "sha256": "e3bd532c006f95c051c303e40dd1489639a43b4a97152e2f33bb82a8bc690f03"
     },
     {
       "path": "references/review-delivery.md",
-      "bytes": 5044,
-      "sha256": "f5b10ccd9e38c4c7ecacec802008ca3f278b9bd6fad8fd36d5224ac44fe94739"
+      "bytes": 5365,
+      "sha256": "3bd08ac403c80ed6e179ebc45c608901de84beeae4e385d5712ab28e8cf71e2c"
     },
     {
       "path": "references/stages.md",
@@ -198,8 +203,8 @@
     },
     {
       "path": "scripts/_workflow.py",
-      "bytes": 7604,
-      "sha256": "1fa6d6a6a04f16c0f9b42c682853bc653e9a25fbc33eebf34a5a2c51b0f1fb0e"
+      "bytes": 7826,
+      "sha256": "a25caaead45113042b1072d0ff6012f3b0f7b319013980ccd92b038a743f9057"
     },
     {
       "path": "scripts/blueprint.py",
@@ -208,8 +213,8 @@
     },
     {
       "path": "scripts/checks.py",
-      "bytes": 7872,
-      "sha256": "76d4a48eb59d16ef35b68ff264a81d5920bb1ecaefefd67d2fc8780b705f52ee"
+      "bytes": 8221,
+      "sha256": "3de1f190d655c3a8650a768bd41a6495b98452dbde17cee95d3502b43d7ff2f3"
     },
     {
       "path": "scripts/compare_images.py",
@@ -233,8 +238,8 @@
     },
     {
       "path": "scripts/materialize.py",
-      "bytes": 5754,
-      "sha256": "aaa9edcbfa338ee6132508e2aad377af4c6b19e2efa4e9f95c975632e7a86a3f"
+      "bytes": 5799,
+      "sha256": "673fc3d5e590e393e57c2473f4c00044f9cfdd55bfae25b7aff7263926598c9f"
     },
     {
       "path": "scripts/migrate_v2.py",
@@ -243,8 +248,13 @@
     },
     {
       "path": "scripts/ora_verify.py",
-      "bytes": 2041,
-      "sha256": "dcfa68d30d2997902e33c81daba4450b0f3d1322311035225d735c2265ae5c08"
+      "bytes": 2334,
+      "sha256": "932f6472ada1daf627a0388f78480de8b1e3e7ed717faa8b74b2089c5de090dc"
+    },
+    {
+      "path": "scripts/photocraft.py",
+      "bytes": 17362,
+      "sha256": "4ea78172d5726a5aaa55b208a3c19c8c6f09f23710de6b96c38e7b54e7f6dd28"
     },
     {
       "path": "scripts/pixel_audit.py",
@@ -253,8 +263,8 @@
     },
     {
       "path": "scripts/production.py",
-      "bytes": 22039,
-      "sha256": "6b6bca30949492a61a6d94dbae6b2a71767d14b0144140c95fcdaec068c13763"
+      "bytes": 22278,
+      "sha256": "b5de45bf6e8263773ee018ca6f69455417d4e9a3236b5ca30169b3673777c04e"
     },
     {
       "path": "scripts/prompt_compile.py",
@@ -273,8 +283,8 @@
     },
     {
       "path": "scripts/review_server.py",
-      "bytes": 5027,
-      "sha256": "6dba066152d74e4187e21e06038456be4adb5eeb969138709742312088387ad0"
+      "bytes": 5126,
+      "sha256": "d01236ea3fe33e31b5bef9e18afae9da5b8a42dcef7496b829706835de434ce5"
     },
     {
       "path": "scripts/stage_context.py",
@@ -288,13 +298,18 @@
     },
     {
       "path": "scripts/workflow.py",
-      "bytes": 22965,
-      "sha256": "cf55342d0b214a84e3b58cea77065a70d68ff7295af0f1149da13cbdb3e18e4f"
+      "bytes": 23376,
+      "sha256": "c52f32ef9f6316dbee4ccac8eae6ada4784b5ca3efaba0fbb3c02c9f2ac481e0"
     },
     {
       "path": "SKILL.md",
-      "bytes": 3930,
-      "sha256": "4241135b26d6f310faea0ff1db8ba086332b2331c7d59ea893ec6424a7467175"
+      "bytes": 4608,
+      "sha256": "235dc05968dadbdd40fef44a246434114987da7dd53b9ab9c2876ce101dbf420"
+    },
+    {
+      "path": "tests/test_editor_v31.py",
+      "bytes": 13820,
+      "sha256": "b61fc053615361c679fb9006b07cf576e70c9eca40de308a8dbb761d04487542"
     },
     {
       "path": "tests/test_feedback_v3.py",
@@ -307,24 +322,29 @@
       "sha256": "97be03dabd6397c0755c8e26d2d9b693a1a6fde88c3d48901da2a4b5249c29ef"
     },
     {
+      "path": "tests/test_ora_v31.py",
+      "bytes": 1929,
+      "sha256": "c599fe1fec7aa255e36891738957681c101c07b38a585525478ee4e566cfd64e"
+    },
+    {
       "path": "tests/test_validation_round2.py",
       "bytes": 14931,
       "sha256": "069312a8973ef31de61e2919f7ba519f5cd8ca1d9d718251517d89b4d70603f5"
     },
     {
       "path": "tests/test_workflow_v3.py",
-      "bytes": 15488,
-      "sha256": "27b992594d214ef14e4dd0b5ceaee9726fdc4eb2529630911d4691df6dcbd0fc"
+      "bytes": 15548,
+      "sha256": "b7d02cb292b2acdb3ebeaad349208f63049bfcc39ac59e211df0c77eb8f31fa5"
     },
     {
       "path": "ui/app.js",
-      "bytes": 9144,
-      "sha256": "c4e6fcdf25ea1077b227580a463cd128bd13f9d9fbfa6c5109bc356f16917331"
+      "bytes": 10270,
+      "sha256": "68e155332021c69cec2daaf693ce319ab0f1a3e6fd122854706fdd6d97559674"
     },
     {
       "path": "ui/index.html",
-      "bytes": 5155,
-      "sha256": "02b54f17310280a84abfab1489bd1c5518e5b0f66e4957c7ac0f4bc095a75262"
+      "bytes": 5829,
+      "sha256": "07f1da34bcbb296ac529aaf9650698f9af6d71b95b12583fb1c42e1ac9e365c7"
     }
   ]
 }

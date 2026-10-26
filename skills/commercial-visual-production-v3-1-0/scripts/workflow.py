@@ -127,7 +127,7 @@ def revision(s,root,d):
     rid=ident(d.get('id'))
     if rid in s['revisions']: raise WorkflowError('revision id is immutable')
     job=s['jobs'].get(d.get('job_id'))
-    if not job or job['status'] not in ('generated','source_ready','materialized'): raise WorkflowError('revision needs an actually completed generation job')
+    if not job or job['status'] not in ('generated','source_ready','editor_ready','materialized'): raise WorkflowError('revision needs an actually completed generation job')
     from production import validate_job
     validate_job(s,root,job,check_budget=False)
     if not fresh(root,job['output_files']): raise WorkflowError('generated output changed')
@@ -149,7 +149,7 @@ def revision(s,root,d):
          'change_request':job['change_request'],'editable_regions':job['editable_regions'],'layer_updates':d.get('layer_updates',[]),'status':'candidate'}
     if parent and not rec['layer_updates']:raise WorkflowError('repair must identify updated source/patch layers')
     s['revisions'][rid]=rec;s['working_revision']=rid;s['checks'][rid]={}
-    if job.get('execution_kind') in ('native_composition','native_source'):job['status']='materialized';job['materialized_revision']=rid
+    if job.get('execution_kind') in ('native_composition','native_source','photocraft'):job['status']='materialized';job['materialized_revision']=rid
     return {'revision':rid,'parent':parent,'acceptance':'pending'}
 
 
@@ -173,6 +173,7 @@ def required_checks(s,r):
     if any(x['verification']=='geometry' for x in active(s)):extra.append('geometry')
     job=s['jobs'].get(r.get('job_id'),{})
     if job.get('blueprint',{}).get('color_checks'):extra.append('color')
+    if s.get('editor_backend')=='photocraft':extra.append('editor')
     return extra+ ['files','layers','design','target','history','seams']+(['non_target'] if r['parent'] else [])+['req:'+x['id'] for x in active(s)]
 def qc(s,root,rid):
     r=s['revisions'].get(rid)
@@ -233,7 +234,7 @@ def close_issue(s,root,d):
 
 def accept_exception(s,root,d):
     i=s['issues'][d['issue_id']];rid=d['revision']
-    if i['severity']!='P2' or i['check_id'] in ('files','layers','non_target') or i['check_id'].startswith('req:') and s['requirements'][i['check_id'][4:]].get('critical',True):raise WorkflowError('only noncritical P2 issues can be accepted')
+    if i['severity']!='P2' or i['check_id'] in ('files','layers','non_target','editor') or i['check_id'].startswith('req:') and s['requirements'][i['check_id'][4:]].get('critical',True):raise WorkflowError('only noncritical P2 issues can be accepted')
     rec=user_evidence(s,root,d);rec['files'].update(s['revisions'][rid]['files'])
     i.update(status='accepted_exception',exception_revision=rid,exception_files=rec['files'],exception=rec)
     return i
@@ -288,9 +289,14 @@ def perform(root,action,data,expected_seq=None):
 
 def summary(root):
     s=load(root);out=context(s,root)
-    out.update(seq=s['seq'],stage_names=STAGES,jobs=[{k:j.get(k) for k in ('id','kind','status','baseline','change_request')} for j in s['jobs'].values()],
+    out.update(seq=s['seq'],stage_names=STAGES,editor_backend=s.get('editor_backend'),jobs=[{k:j.get(k) for k in ('id','kind','status','baseline','change_request')} for j in s['jobs'].values()],
                revisions=[{k:r.get(k) for k in ('id','parent','image','spec','change_request')} for r in s['revisions'].values()],master=s['master'],deliveries=s['deliveries'])
-    if s['working_revision']:out['qc']=qc(s,root,s['working_revision'])
+    if s['working_revision']:
+        out['qc']=qc(s,root,s['working_revision'])
+        from _common import load_project
+        p,_=load_project(local(root,s['revisions'][s['working_revision']]['spec']))
+        out['editor_targets']=[e['id'] for e in p['elements'] if e.get('lock') not in ('L0','L1')]
+    else:out['editor_targets']=[]
     return out
 
 def main():

@@ -7,7 +7,7 @@ import numpy as np
 def main():
     p=argparse.ArgumentParser();p.add_argument("--out",required=True);a=p.parse_args()
     root=Path(__file__).resolve().parents[1]
-    sys.path.insert(0,str(root/"skills/commercial-visual-production-v3-0-0/tests"))
+    sys.path.insert(0,str(root/"skills/commercial-visual-production-v3-1-0/tests"))
     from test_workflow_v3 import Fixture,w,prod,mat,checks,load
     f=Fixture();f.setUp()
     try:

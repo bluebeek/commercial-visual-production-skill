@@ -6,11 +6,11 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--out",required=True);ap.add_argument("--samples",required=True);ap.add_argument("--font",required=True)
     a=ap.parse_args();repo=Path(__file__).resolve().parents[1]
-    sys.path.insert(0,str(repo/"skills/commercial-visual-production-v3-0-0/scripts"))
+    sys.path.insert(0,str(repo/"skills/commercial-visual-production-v3-1-0/scripts"))
     import workflow as w,production as prod,materialize as mat,checks
     from _workflow import create,load,atomic,active
     from blueprint import preview
-    root=Path(a.out).resolve();src=Path(a.samples).resolve();create(root,"chinese-source-zero-call",True,1)
+    root=Path(a.out).resolve();src=Path(a.samples).resolve();create(root,"chinese-source-zero-call",True,1,editor_backend=None)
     for p in src.glob("*.png"):shutil.copyfile(p,root/p.name)
     shutil.copyfile(src/"export/merged_preview.png",root/"reference.png")
     brief="TEST ONLY: repair 我们的产吕 to 我们的产品; preserve all other content and pixels."

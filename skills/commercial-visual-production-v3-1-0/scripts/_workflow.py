@@ -40,12 +40,13 @@ def load(root):
     s=json.loads(p.read_text(encoding='utf-8'))
     if not isinstance(s,dict) or s.get('schema')!=SCHEMA: raise WorkflowError('invalid V3 project state')
     return s
-def create(root, project_id, test_mode=False, call_budget=4):
+def create(root, project_id, test_mode=False, call_budget=4, editor_backend="photocraft"):
+    if editor_backend not in ('photocraft',None) or (editor_backend is None and not test_mode):raise WorkflowError('new production projects require PhotoCraft')
     root=Path(root).resolve()
     with project_lock(root):
         if (root/'workflow_state.json').exists(): raise WorkflowError('project already exists')
         if not isinstance(call_budget,int) or call_budget<0: raise WorkflowError('invalid call budget')
-        s={'schema':SCHEMA,'workflow_version':'3.0.0','project_id':ident(project_id),'seq':0,'test_mode':bool(test_mode),
+        s={'schema':SCHEMA,'workflow_version':'3.1.0','editor_backend':editor_backend,'project_id':ident(project_id),'seq':0,'test_mode':bool(test_mode),
            'call_budget':call_budget,'calls_used':0,'stages':{},'requirements':{},'assets':{},'jobs':{},'revisions':{},'checks':{},'issues':{},
            'decisions':[],'history':[],'working_revision':None,'accepted_revision':None,'master':None,'deliveries':{},'migration':None}
         atomic(root/'workflow_state.json',s)

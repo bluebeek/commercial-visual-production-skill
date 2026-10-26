@@ -1,6 +1,6 @@
 # R4核验、R5缺陷闭环与R6交付
 
-本包版本3.0.0，权威工作流状态为cvisual.workflow.v3；复用的像素/几何/图层工具保留cvisual.audit.v2及tool_version=2.2.0协议标识，协议号独立于安装包号，不是误装旧版。
+本包版本3.1.0，权威工作流状态为cvisual.workflow.v3；复用的像素/几何/图层工具保留cvisual.audit.v2及tool_version=2.2.0协议标识，协议号独立于安装包号，不是误装旧版。
 
 所有路径必须在项目内。使用workflow.py status读取简报；export读取完整状态。source文件和用户决定是真实记录；本地声明不提供认证签名。测试项目的actor只能test，商业项目的确认actor只能user。
 
@@ -39,3 +39,7 @@ start_review.py --project <目录> --port 8765，浏览本地地址。运行检�
 migrate_v2.py --source <旧项目> --project <全新目录> 默认只预演；--apply归档旧状态和已绑定证据到新目录，创建未绑定V3项目，原目录不改。映射：旧R0.roles及R1→新R0；旧R0.assets/scope→新R1；旧R2/R3.preview→新R2；旧R3/R4→新R3/R5；旧R5及质量项→新R4；旧图层/文件检查→新R6。
 
 旧approved不导入为新批准；旧resolved实际表示已提交修复，映射ready_for_review。孤立问题、缺失文件和原始记录保留在migration清单，待助理依据真实内容重新建立新阶段及核验。compat/v2保留原脚本/测试/界面作诊断，正常V3执行不加载它。
+
+## V3.1 PhotoCraft通路
+
+确定性矩形编辑和外部引擎验收按 [PhotoCraft契约](photocraft.md) 执行。生成与编辑分开计数；新项目必须有当前editor机器检查。ORA支持平面裁切层的画布内偏移，逐层内容和合成结果均须一致；引擎通过不扩展为桌面GUI兼容。

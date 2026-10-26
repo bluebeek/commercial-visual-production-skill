@@ -9,7 +9,7 @@ from _evidence import verify_report
 from ora_verify import read_ora
 
 def implementation(cid='layers'):
-    names=('checks.py','_workflow.py')+{'files':(), 'non_target':('_common.py',), 'layers':('ora_verify.py','export_layers.py','_common.py','_images.py','_evidence.py'), 'geometry':('layout_audit.py','_common.py','_evidence.py'), 'color':('pixel_audit.py','_common.py','_images.py','_evidence.py')}.get(cid,())
+    names=('checks.py','_workflow.py')+{'editor':('photocraft.py','ora_verify.py','_common.py'), 'files':(), 'non_target':('_common.py',), 'layers':('ora_verify.py','export_layers.py','_common.py','_images.py','_evidence.py'), 'geometry':('layout_audit.py','_common.py','_evidence.py'), 'color':('pixel_audit.py','_common.py','_images.py','_evidence.py')}.get(cid,())
     return {n:sha(Path(__file__).parent/n) for n in names}
 def run_script(name,args):
     cmd=[sys.executable,'-B','-X','utf8',str(Path(__file__).parent/name)]+list(map(str,args))
@@ -81,6 +81,8 @@ def export_delivery(s,root,d):
     if not master or master['revision']!=rid or not fresh(root,master['files']) or master['rules_hash']!=rules_hash(s) or qc(s,root,rid)['status']!='PASS':raise WorkflowError('delivery needs current frozen master')
     out=root/'delivery'/did;out.mkdir(parents=True,exist_ok=False)
     result=inspect_layers(root,s['revisions'][rid],out)
+    editor=s['checks'][rid].get('editor',{})
+    if editor.get('status')=='PASS':result.update(editor_open='PASS_ENGINE',editor_gui='NOT_TESTED',editor_backend='photocraft',editor_report=editor['detail'])
     files=bind(root,[p.relative_to(root) for p in out.rglob('*') if p.is_file()])
     rec={'id':did,'revision':rid,'status':'awaiting_acceptance','files':files,'master_files':dict(master['files']),'rules_hash':rules_hash(s),'verification':result,'implementation':implementation(),'at':now()}
     s['deliveries'][did]=rec;return rec
@@ -94,11 +96,12 @@ def accept_delivery(s,root,d):
     s['decisions'].append(approval);rec['status']='accepted';rec['acceptance']=approval;return rec
 
 def action(root,name,data,expected_seq=None):
-    def operation(s,r):return {'run':run_checks,'export':export_delivery,'accept-delivery':accept_delivery}[name](s,r,data)
+    from photocraft import verify_editor
+    def operation(s,r):return {'verify-editor':verify_editor,'run':run_checks,'export':export_delivery,'accept-delivery':accept_delivery}[name](s,r,data)
     operation.__name__='checks-'+name
     return transact(root,operation,expected_seq)
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('action',choices=['run','export','accept-delivery']);ap.add_argument('--project',required=True,type=Path);ap.add_argument('--input',required=True,type=Path);a=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('action',choices=['run','export','accept-delivery','verify-editor']);ap.add_argument('--project',required=True,type=Path);ap.add_argument('--input',required=True,type=Path);a=ap.parse_args()
     try:print(dump(action(a.project,a.action,json.loads(a.input.read_text(encoding='utf-8')))));return 0
     except (ValueError,OSError,KeyError,TypeError) as e:print(dump({'status':'BLOCK','error':str(e)}));return 2
 if __name__=='__main__':sys.exit(main())

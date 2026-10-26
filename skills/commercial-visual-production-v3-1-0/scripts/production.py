@@ -13,7 +13,7 @@ TASK_NEG={'background':'只生成背景和指定辅助图形。真实产品、�
           'whole':'仅渲染明确提供的文案；不改写、不添加、不漏字。保留需后期合成的真实素材位置。',
           'local-edit':'仅改变明确编辑区及允许过渡区。保持其余画面，不顺带重新构图、裁切、缩放、全局调色或改变其他主体和文字。'}
 
-def implementation():return {f:sha(Path(__file__).parent/f) for f in ('production.py','workflow.py','_workflow.py','_common.py')}
+def implementation():return {f:sha(Path(__file__).parent/f) for f in ('production.py','workflow.py','_workflow.py','_common.py','photocraft.py','ora_verify.py')}
 def pct(x):return format(Decimal(str(x))*100,'f').rstrip('0').rstrip('.')+'%' if '.' in format(Decimal(str(x))*100,'f') else format(Decimal(str(x))*100,'f')+'%'
 def geometry(e):
     x,y,w,h=e['box'];return e['id']+'：左'+pct(x)+'、上'+pct(y)+'、宽'+pct(w)+'、高'+pct(h)
@@ -228,13 +228,14 @@ def cancel_job(s,root,d):
     return {'status':'CANCELLED','image_calls_added':0,'job_id':j['id']}
 
 def action(root,verb,data,expected_seq=None):
-    functions={'prepare-source':prepare_source_edit,'cancel':cancel_job,'prepare-compose':prepare_composition,'prepare':prepare,'begin':begin,'finish':finish}
+    from photocraft import prepare_editor,begin_editor,finish_editor
+    functions={'prepare-editor':prepare_editor,'begin-editor':begin_editor,'finish-editor':finish_editor,'prepare-source':prepare_source_edit,'cancel':cancel_job,'prepare-compose':prepare_composition,'prepare':prepare,'begin':begin,'finish':finish}
     def operation(s,r):return functions[verb](s,r,data)
     operation.__name__='production-'+verb
     return transact(root,operation,expected_seq)
 
 def main():
-    a=argparse.ArgumentParser();a.add_argument('action',choices=['prepare','prepare-compose','prepare-source','begin','finish','cancel']);a.add_argument('--project',required=True,type=Path);a.add_argument('--input',required=True,type=Path);o=a.parse_args()
+    a=argparse.ArgumentParser();a.add_argument('action',choices=['prepare','prepare-compose','prepare-source','begin','finish','cancel','prepare-editor','begin-editor','finish-editor']);a.add_argument('--project',required=True,type=Path);a.add_argument('--input',required=True,type=Path);o=a.parse_args()
     try:print(dump(action(o.project,o.action,json.loads(o.input.read_text(encoding='utf-8')))));return 0
     except (ValueError,OSError,KeyError,TypeError) as e:print(dump({'status':'BLOCK','error':str(e)}));return 2
 if __name__=='__main__':sys.exit(main())

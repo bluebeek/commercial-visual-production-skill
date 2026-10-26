@@ -12,7 +12,7 @@ from _images import srgb_bytes
 
 def materialize(root,job_id,target_element=None):
     root=Path(root).resolve();s=load(root);j=s['jobs'][job_id]
-    if j['status'] not in ('generated','source_ready') or not fresh(root,j['output_files']):raise WorkflowError('actual unmodified generated result required')
+    if j['status'] not in ('generated','source_ready','editor_ready') or not fresh(root,j['output_files']):raise WorkflowError('actual unmodified generated result required')
     validate_job(s,root,j,False)
     folder=root/'production'/job_id/'materialized';folder.mkdir(parents=True,exist_ok=False)
     p,base=load_project(local(root,j['spec']));p=copy.deepcopy(p);w,h=p['canvas']['width'],p['canvas']['height']
@@ -20,7 +20,7 @@ def materialize(root,job_id,target_element=None):
     for e in p['elements']:
         if e.get('source'):e['source']=(base/e['source']).relative_to(root).as_posix()
     updates=[]
-    if j['kind'] in ('local-edit','compose-repair'):
+    if j['kind'] in ('local-edit','compose-repair','editor-local'):
         baseline=s['revisions'][j.get('restoration_base') or j['baseline']]
         if j.get('application_regions'):p['editable_regions']=j['application_regions']
         applyspec=root/('apply-'+job_id+'.json');atomic(applyspec,p)
@@ -50,7 +50,7 @@ def materialize(root,job_id,target_element=None):
     composite=Image.new('RGBA',(w,h),p['canvas'].get('background','#FFFFFF'))
     for e in sorted(p['elements'],key=lambda x:x.get('z',0)):
         if e.get('source'):composite.alpha_composite(layer_for(e,root,w,h,p.get('color_management',{}).get('assume_untagged_srgb',False)))
-    if j['kind'] in ('local-edit','compose-repair'):
+    if j['kind'] in ('local-edit','compose-repair','editor-local'):
         with Image.open(folder/'locked.png') as locked:
             if composite.tobytes()!=locked.convert('RGBA').tobytes():raise WorkflowError('patch cannot exactly reconstruct locked image; requires another native layer strategy')
     if j['kind']=='source-edit':

@@ -49,6 +49,7 @@ class Handler(BaseHTTPRequestHandler):
      rid=d['revision'];d.update(actor='test' if s['test_mode'] else 'user',evidence_files=[s['revisions'][rid]['image']])
     if name in ('run-checks','export-delivery','accept-delivery'):
      result=checks.action(self.server.project,{'run-checks':'run','export-delivery':'export','accept-delivery':'accept-delivery'}[name],d,seq)
+    elif name=='queue-editor':result=production.action(self.server.project,'prepare-editor',d,seq)
     elif name=='queue-generation':result=production.action(self.server.project,'prepare',d,seq)
     else:result=workflow.perform(self.server.project,name,d,seq)
    return self.send(200,{'ok':True,'result':result})

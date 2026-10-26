@@ -40,12 +40,13 @@ def load(root):
     s=json.loads(p.read_text(encoding='utf-8'))
     if not isinstance(s,dict) or s.get('schema')!=SCHEMA: raise WorkflowError('invalid V3 project state')
     return s
-def create(root, project_id, test_mode=False, call_budget=4):
+def create(root, project_id, test_mode=False, call_budget=4, editor_backend="photocraft"):
+    if editor_backend not in ('photocraft',None) or (editor_backend is None and not test_mode):raise WorkflowError('new production projects require PhotoCraft')
     root=Path(root).resolve()
     with project_lock(root):
         if (root/'workflow_state.json').exists(): raise WorkflowError('project already exists')
         if not isinstance(call_budget,int) or call_budget<0: raise WorkflowError('invalid call budget')
-        s={'schema':SCHEMA,'workflow_version':'3.0.0','project_id':ident(project_id),'seq':0,'test_mode':bool(test_mode),
+        s={'schema':SCHEMA,'workflow_version':'3.1.0','editor_backend':editor_backend,'project_id':ident(project_id),'seq':0,'test_mode':bool(test_mode),
            'call_budget':call_budget,'calls_used':0,'stages':{},'requirements':{},'assets':{},'jobs':{},'revisions':{},'checks':{},'issues':{},
            'decisions':[],'history':[],'working_revision':None,'accepted_revision':None,'master':None,'deliveries':{},'migration':None}
         atomic(root/'workflow_state.json',s)
@@ -95,9 +96,12 @@ def context(s,root,stage='R3'):
     unknown=[r['id'] for r in s['requirements'].values() if r['status']=='unknown' and r.get('critical',True)]
     rules=active(s)
     stale_rules=[r['id'] for r in rules if not fresh(root,r['files']) or (r['source']['kind']=='translation' and not any(x['observation_id']==r['source'].get('observation_id') and x['decision'] in ('adopt','adapt') for x in s['stages'].get('R1',{}).get('data',{}).get('decisions',[])))]
+    test_sources=[] if s['test_mode'] else (
+        ['asset:'+aid for aid,a in s['assets'].items() if a.get('description_source')=='test']+
+        ['requirement:'+r['id'] for r in s['requirements'].values() if r['status'] in ('active','unknown') and r['source']['kind']=='test'])
     out={'schema':SCHEMA,'project_id':s['project_id'],'project_root':str(Path(root).resolve()),'target':stage,
-         'status':'BLOCK' if missing or stale or stale_assets or stale_rules or unknown else 'READY',
-         'missing_stages':missing,'stale_stages':stale,'stale_assets':stale_assets,'stale_requirements':stale_rules,'unknown_requirements':unknown,
+         'status':'BLOCK' if missing or stale or stale_assets or stale_rules or unknown or test_sources else 'READY',
+         'missing_stages':missing,'stale_stages':stale,'stale_assets':stale_assets,'stale_requirements':stale_rules,'unknown_requirements':unknown,'test_sources':test_sources,
          'requirements':rules,'blueprint_accepted':approved_blueprint(s,root),
          'stages':{k:{'id':v['id'],'data':v['data'],'files':v['files']} for k,v in s['stages'].items() if k in (['R0'] if stage=='R0' else ['R0','R1'] if stage=='R1' else ['R1','R2'])},
          'working_revision':s['working_revision'],'accepted_revision':s['accepted_revision'],

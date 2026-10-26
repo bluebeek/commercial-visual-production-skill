@@ -14,18 +14,33 @@ env:
 
 jobs:
   regression:
-    runs-on: windows-latest
+    name: ${{ matrix.os }} / Python ${{ matrix.python }} / scipy=${{ matrix.scipy }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: windows-latest, python: "3.10", scipy: false}
+          - {os: windows-latest, python: "3.11", scipy: true}
+          - {os: ubuntu-latest, python: "3.11", scipy: false}
+          - {os: ubuntu-latest, python: "3.11", scipy: true}
+          - {os: ubuntu-latest, python: "3.12", scipy: true}
+          - {os: macos-latest, python: "3.11", scipy: true}
     steps:
       - name: Preserve exact source bytes
         run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python }}
       - run: python -m pip install -r requirements.txt
-      - name: V3 regression (54 tests at release preparation)
-        working-directory: skills/commercial-visual-production-v3-0-0
-        run: python -m unittest discover -s tests -q
-      - name: Isolated V2 compatibility (70 tests at release preparation)
-        working-directory: skills/commercial-visual-production-v3-0-0/compat/v2
-        run: python -m unittest discover -s tests -q
+      - name: Optional SciPy path
+        if: matrix.scipy
+        run: python -m pip install scipy
+      - name: Isolated V3 and V2 regression with provenance
+        run: python tools/run_validation.py --out validation-results
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: validation-${{ matrix.os }}-py${{ matrix.python }}-scipy${{ matrix.scipy }}
+          path: validation-results

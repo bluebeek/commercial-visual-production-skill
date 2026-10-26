@@ -1,10 +1,12 @@
-# 商业视觉生产 Skill V3.0.0
+# 商业视觉生产 Skill V3.1.0
 
 [English](README.en.md) · [验证范围 / Validation](VALIDATION.md) · [发布说明 / Release notes](CHANGELOG.md)
 
-面向支持本地 Skill、文件操作、Python 和内置图像生成工具的助理环境，将参考解析、品牌转译、创意蓝图、视觉生产、核验、定向修复与 PNG/ORA 交付连接为可追溯流程。项目文件保存当前有效要求、素材、父子版本、问题与用户决定；恢复会话时重新读取状态，而不是依赖模型记住整个聊天。
+面向支持本地 Skill、文件操作、Python、PhotoCraft MCP及独立图像生成工具的助理环境，将参考解析、品牌转译、创意蓝图、视觉生产、核验、定向修复与 PNG/ORA 交付连接为可追溯流程。项目文件保存当前有效要求、素材、父子版本、问题与用户决定；恢复会话时重新读取状态，而不是依赖模型记住整个聊天。
 
-技能名：`commercial-visual-production-v3-0-0`。当前版本：**3.0.0**。这是执行指引、项目状态程序、检测工具和本地审核工作台的组合，需要助理参与视觉理解与图像工具调用。
+技能名：`commercial-visual-production-v3-1-0`。当前版本：**3.1.0**。这是执行指引、项目状态程序、检测工具和本地审核工作台的组合，需要助理参与视觉理解与图像工具调用。
+
+V3.1新增PhotoCraft限定矩形编辑与引擎分层验收；生图仍走独立image_gen。实际范围见 [V3.1报告](validation/v3.1/REPORT.md)，详细执行契约见 [PhotoCraft](skills/commercial-visual-production-v3-1-0/references/photocraft.md)。本阶段真实生图预算为0，Krita/Affinity不再作为当前调用目标。
 
 ## 使用范围
 
@@ -27,15 +29,15 @@
 运行脚本需要 Python 3.10 或更高版本，以及 Pillow、NumPy。SciPy 为可选项；区域内羽化可使用 Pillow 回退。图像生成需要当前对话提供内置 `image_gen.imagegen`，该首选路径不需要填写外部 API 密钥。普通 Python 或网页环境单独安装本仓库不能获得该工具。
 
 1. 下载或克隆本仓库。
-2. 将 `skills/commercial-visual-production-v3-0-0` 整个文件夹放入 `$CODEX_HOME/skills/`。未设置该变量时，常见目录为 `~/.codex/skills/`。
+2. 将 `skills/commercial-visual-production-v3-1-0` 整个文件夹放入 `$CODEX_HOME/skills/`。未设置该变量时，常见目录为 `~/.codex/skills/`。
 3. 在用于本技能的 Python 环境安装依赖：`python -m pip install -r requirements.txt`。
-4. 打开新对话并调用 `$commercial-visual-production-v3-0-0`。旧 V2.3.0 可保留，但同一项目不要混用阶段语义。
+4. 打开新对话并调用 `$commercial-visual-production-v3-1-0`。升级时先校验新版，并把旧生产技能归档到安装目录外；QC技能独立保留。
 
-支持 Skill 安装器的环境也可以从仓库中的 `skills/commercial-visual-production-v3-0-0` 路径安装。跨主机平台兼容性尚未全部实测；本轮实测环境为 Windows。
+支持 Skill 安装器的环境也可以从仓库中的 `skills/commercial-visual-production-v3-1-0` 路径安装。脚本六环境矩阵与本机PhotoCraft引擎调用分别留证，不将脚本通过扩展为所有系统的编辑器验证。
 
 建议的起始请求：
 
-> 使用 $commercial-visual-production-v3-0-0，为本项目依次完成参考解析、品牌转译、蓝图与视觉生产。先读取我提供的参考和品牌资产，缺少关键资料时再问我；生成前让我确认蓝图，返图仅修改明确范围，最终交付 PNG 和 ORA。
+> 使用 $commercial-visual-production-v3-1-0，为本项目依次完成参考解析、品牌转译、蓝图与视觉生产。先读取我提供的参考和品牌资产，缺少关键资料时再问我；生成前让我确认蓝图，返图仅修改明确范围，最终交付 PNG 和 ORA。
 
 用户不需要手写内部 JSON。助理根据真实素材和用户说明建立项目记录，只追问影响执行的缺项。
 
@@ -79,7 +81,7 @@
 
 ## 审核按钮与缺陷闭环
 
-本地工作台可查看有效要求与来源、运行检查、读取报告、登记用户决定、提交问题、创建定向修复、提交复核、比较版本及选择旧版继续。运行检查真正产生新报告；查看报告只读取并检查时效。生产按钮仅登记 `waiting_execution`，须由当前对话助理调用图像工具。
+本地工作台可查看有效要求与来源、运行检查、读取报告、登记用户决定、提交问题、创建定向修复、提交复核、比较版本及选择旧版继续。运行检查真正产生新报告；查看报告只读取并检查时效。生产按钮仅登记 `waiting_execution`，须由当前对话助理按任务类型调用PhotoCraft或独立生图工具。
 
 缺陷流程为：待修复 → 修复中 → 待复核 → 核验关闭；失败或证据失效须重新处理。P0/P1、关键未知和必要证据缺失阻止冻结；具体非关键 P2 只有用户明确接受该版本的问题才可保留，接受不代表修复。
 
@@ -93,11 +95,11 @@
 | 核验与差异报告 | 实际执行的检查、修改区外及保护区比较、已知限制 |
 | 项目记录与版本证据 | 当前要求、父子版本、任务、问题、接受及交付决定 |
 
-项目资料保存在项目目录，是否向客户分享历史、原件或内部证据由项目方决定。最终候选、核验对象和导出母版必须是同一有效版本。目标设计软件的实际打开兼容性需另行验证；未测软件不得标为兼容。
+项目资料保存在项目目录，是否向客户分享历史、原件或内部证据由项目方决定。最终候选、核验对象和导出母版必须是同一有效版本。新项目须完成绑定候选的PhotoCraft引擎机器验收；桌面GUI与其他未测软件保持未验证。
 
 ## 脚本、工作台和测试
 
-通常由助理执行。以下命令在 `skills/commercial-visual-production-v3-0-0` 内运行：
+通常由助理执行。以下命令在 `skills/commercial-visual-production-v3-1-0` 内运行：
 
 ```sh
 python scripts/workflow.py init --project <project-directory> --project-id <project-id> --call-budget 4
@@ -113,7 +115,7 @@ cd compat/v2
 python -m unittest discover -s tests -q
 ```
 
-更多实际输入契约见 Skill 内的 [阶段规则](skills/commercial-visual-production-v3-0-0/references/stages.md)、[生产规则](skills/commercial-visual-production-v3-0-0/references/execution.md)、[审核与交付规则](skills/commercial-visual-production-v3-0-0/references/review-delivery.md)。
+更多实际输入契约见 Skill 内的 [阶段规则](skills/commercial-visual-production-v3-1-0/references/stages.md)、[生产规则](skills/commercial-visual-production-v3-1-0/references/execution.md)、[审核与交付规则](skills/commercial-visual-production-v3-1-0/references/review-delivery.md)。
 
 ## 版本与旧项目迁移
 
@@ -122,6 +124,8 @@ V3 使用 `cvisual.workflow.v3` 项目状态。复用检测报告保留 `cvisual
 旧参考解码 → R0；旧品牌资产与用途 → R1；旧蓝图及预览 → R2；旧生产与保护 → R3/R5；旧成品质检 → R4；旧交付检查 → R6。迁移默认预演，应用时写入全新目录，原项目不改。旧批准不能自动成为新批准，旧“已提交修复”也不能冒充核验关闭。
 
 ## 验证概况与许可
+
+开发候选的第二轮零调用验证见 [实际报告](validation/round2/REPORT.md)：含测试来源隔离修复、程序回归与原生文字修正；软件打开验收仍有未测项。下述发布概况属于原 V3.0.0 历史记录。
 
 发布前通过 54 项 V3 测试及独立的 70 项旧版兼容测试。一个受控分层海报完成 4 次真实图像调用与连续三轮修改，最终保护区和最后一轮非目标区域像素差异为零，8 层 PNG/ORA 重组匹配测试母版。覆盖范围与未测项目见 [VALIDATION.md](VALIDATION.md)。
 

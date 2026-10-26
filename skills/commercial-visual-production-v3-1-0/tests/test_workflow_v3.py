@@ -11,7 +11,7 @@ from ora_verify import read_ora
 
 class Fixture(unittest.TestCase):
  def setUp(self):
-  self.temp=tempfile.TemporaryDirectory();self.p=Path(self.temp.name).resolve();create(self.p,'test-project',True,20)
+  self.temp=tempfile.TemporaryDirectory();self.p=Path(self.temp.name).resolve();create(self.p,'test-project',True,20,editor_backend=None) # explicit legacy compatibility fixture
   (self.p/'source.txt').write_text('TEST ONLY: user brief, no commercial approval. Blue background; product unchanged.',encoding='utf-8')
   Image.new('RGBA',(20,20),'red').save(self.p/'product.png');Image.new('RGB',(64,96),'blue').save(self.p/'reference.png')
   w.perform(self.p,'asset',{'id':'product','path':'product.png','role':'product','description':'测试产品原件','description_source':'test','must_keep':['颜色、轮廓'],'allowed_changes':[]})

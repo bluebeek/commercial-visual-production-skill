@@ -6,6 +6,8 @@ Python 3.10+，Pillow、NumPy。所有项目资料放在独立项目目录。命
 
 ## R0 九模块
 
+单项输入先保存在项目内的独立输入草稿，保留原话、对象和来源；累计完成九模块后再正式提交。草稿不是已完成阶段。只纠正一项时保留其他条目及证据，并重新核对受影响下游；当前接口不提供单模块正式提交或字段级精准失效。
+
 stage输入为stage=R0、data={references:[{path,role}],observations:[{id,module,text,certainty,evidence_file}]}，可带evidence_files。module覆盖1–9；certainty为observed/estimated/unknown。实际观察必须指向已登记的真实参考图。可记录可见位置、估计比例与未知字体，但不把观察变成项目布局。
 
 1. 视觉风格：媒介、调性、表现语言和复杂度。
@@ -20,7 +22,7 @@ stage输入为stage=R0、data={references:[{path,role}],observations:[{id,module
 
 ## R1 品牌转译与规则
 
-先用asset登记每个真实素材：id/path/role/description/description_source(user或observed)，must_keep、allowed_changes均为文本数组。观察得到的描述不能冒充用户授权。文件和素材ID不可覆盖；更新素材使用新版本ID。
+先用asset登记每个真实素材：id/path/role/description/description_source(user或observed)，must_keep、allowed_changes均为文本数组。观察得到的描述不能冒充用户授权。test 来源的素材描述和要求只允许测试项目，不得进入商业项目替换品牌依据。文件和素材ID不可覆盖；更新素材使用新版本ID。
 
 stage R1 data只包含purpose、asset_roles(素材ID数组)、decisions、notes。decisions对每个R0观察各列observation_id、decision(adopt/adapt/reject)、reason。品牌文件/用户用途和规范列入evidence_files。此阶段不创建布局。
 

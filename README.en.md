@@ -1,10 +1,12 @@
-# Commercial Visual Production Skill V3.0.0
+# Commercial Visual Production Skill V3.1.0
 
 [简体中文](README.md) · [Validation](VALIDATION.md) · [Release notes](CHANGELOG.md)
 
 A traceable workflow connecting reference analysis, project brand translation, creative blueprints, image production, review, targeted repairs, and PNG/ORA delivery. It is designed for assistant environments with local Skills, file access, Python, and the built-in image-generation tool. Project files retain active requirements, assets, version ancestry, issues, and user decisions. A resumed conversation reloads that state instead of relying on the model to remember the entire chat.
 
-Skill name: `commercial-visual-production-v3-0-0`. Package version: **3.0.0**. The package combines assistant instructions, project-state programs, verification tools, and a local review workbench. Visual interpretation and image-tool execution require an assistant.
+Skill name: `commercial-visual-production-v3-1-0`. Package version: **3.1.0**. The package combines assistant instructions, project-state programs, verification tools, and a local review workbench. Visual interpretation and image-tool execution require an assistant.
+
+V3.1 adds PhotoCraft bounded rectangle editing and mandatory candidate-bound engine roundtrip checks for new projects. Image generation remains separate; this development stage uses zero real image-generation calls. See [the versioned report](validation/v3.1/REPORT.md) and [PhotoCraft contract](skills/commercial-visual-production-v3-1-0/references/photocraft.md). GUI, live text and broader editor behavior remain unverified.
 
 ## Scope
 
@@ -27,15 +29,15 @@ This is not an unattended design service, native PSD/vector/live-text editor, au
 Scripts require Python 3.10+ with Pillow and NumPy. SciPy is optional; inner feathering has a Pillow fallback. Image generation requires the current conversation to expose the built-in `image_gen.imagegen` tool. This preferred path does not require an external API key. Installing the repository into an ordinary Python or web environment does not provide that tool.
 
 1. Download or clone this repository.
-2. Copy the entire `skills/commercial-visual-production-v3-0-0` directory into `$CODEX_HOME/skills/`. If that variable is unset, the usual location is `~/.codex/skills/`.
+2. Copy the entire `skills/commercial-visual-production-v3-1-0` directory into `$CODEX_HOME/skills/`. If that variable is unset, the usual location is `~/.codex/skills/`.
 3. Install runtime dependencies into the Python environment used for this Skill: `python -m pip install -r requirements.txt`.
-4. Start a new conversation and invoke `$commercial-visual-production-v3-0-0`. You may keep V2.3.0 installed, but do not mix old and new stage semantics in one project.
+4. Start a new conversation and invoke `$commercial-visual-production-v3-1-0`. Archive older production skills outside the install directory after validating the new copy; keep the separate QC skill unchanged.
 
-A compatible Skill installer can also install the repository path `skills/commercial-visual-production-v3-0-0`. Cross-platform behavior has not been fully tested; the current validation was performed on Windows.
+A compatible Skill installer can also install the repository path `skills/commercial-visual-production-v3-1-0`. Script CI coverage and actual PhotoCraft engine coverage are reported separately.
 
 Suggested first request:
 
-> Use $commercial-visual-production-v3-0-0 to take this project through reference analysis, brand translation, a blueprint, and visual production. Read the supplied references and brand assets first, and ask only for missing essentials. Have me confirm the blueprint before generation, restrict revisions to the requested scope, and deliver PNG and ORA.
+> Use $commercial-visual-production-v3-1-0 to take this project through reference analysis, brand translation, a blueprint, and visual production. Read the supplied references and brand assets first, and ask only for missing essentials. Have me confirm the blueprint before generation, restrict revisions to the requested scope, and deliver PNG and ORA.
 
 Users do not need to author internal JSON. The assistant builds project records from actual supplied materials and instructions, asking only about gaps that affect execution.
 
@@ -97,7 +99,7 @@ Project material remains in the project directory. The project owner chooses whe
 
 ## Scripts, workbench, and tests
 
-The assistant normally runs these commands. From `skills/commercial-visual-production-v3-0-0`:
+The assistant normally runs these commands. From `skills/commercial-visual-production-v3-1-0`:
 
 ```sh
 python scripts/workflow.py init --project <project-directory> --project-id <project-id> --call-budget 4
@@ -113,7 +115,7 @@ cd compat/v2
 python -m unittest discover -s tests -q
 ```
 
-The detailed internal contracts currently remain in Chinese: [stage rules](skills/commercial-visual-production-v3-0-0/references/stages.md), [production rules](skills/commercial-visual-production-v3-0-0/references/execution.md), and [review/delivery rules](skills/commercial-visual-production-v3-0-0/references/review-delivery.md). The assistant can explain them in the user language. The workbench UI is not advertised as fully localized.
+The detailed internal contracts currently remain in Chinese: [stage rules](skills/commercial-visual-production-v3-1-0/references/stages.md), [production rules](skills/commercial-visual-production-v3-1-0/references/execution.md), and [review/delivery rules](skills/commercial-visual-production-v3-1-0/references/review-delivery.md). The assistant can explain them in the user language. The workbench UI is not advertised as fully localized.
 
 ## Versions and migration
 

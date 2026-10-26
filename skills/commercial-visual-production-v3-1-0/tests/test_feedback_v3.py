@@ -18,14 +18,14 @@ class FeedbackRegression(Fixture):
   self.generate();w.perform(self.p,'issue',{'id':'old','revision':'v1','check_id':'req:blue','scope':'background','severity':'P1','expected':'blue','actual':'not blue'})
   with self.assertRaises(WorkflowError):w.perform(self.p,'supersede-issue',{'issue_id':'old','replacement_requirement':'product-lock'})
  def test_polygon_prompt_is_compact_but_mask_is_exact(self):
-  self.generate();r=load(self.p)['revisions']['v1'];p=json.loads((self.p/r['spec']).read_text());points=[[.75+.1*math.cos(i*2*math.pi/100),.65+.1*math.sin(i*2*math.pi/100)] for i in range(100)];p['editable_regions']=[{'id':'precise','polygon':points}];atomic(self.p/'polygon.json',p)
+  self.generate();r=load(self.p)['revisions']['v1'];p=json.loads((self.p/r['spec']).read_text(encoding='utf-8'));points=[[.75+.1*math.cos(i*2*math.pi/100),.65+.1*math.sin(i*2*math.pi/100)] for i in range(100)];p['editable_regions']=[{'id':'precise','polygon':points}];atomic(self.p/'polygon.json',p)
   out=prod.action(self.p,'prepare',{'id':'poly','kind':'local-edit','goal':'只修指定局部','change_request':'仅改变明确区域','baseline':'v1','spec':'polygon.json','input_images':[{'path':r['image'],'role':'baseline','description':'real baseline'}],'feather':4});j=load(self.p)['jobs']['poly'];self.assertLess(out['prompt_chars'],2000);self.assertEqual(j['editable_regions'][0]['polygon'],points);self.assertEqual(j['feather'],4)
  def test_cancelled_job_never_consumes_generation_budget(self):
   j=self.prepare();used=load(self.p)['calls_used'];prod.action(self.p,'cancel',{'job_id':j['id'],'reason':'replace unattempted prompt'})
   self.assertEqual(load(self.p)['calls_used'],used)
   with self.assertRaises(WorkflowError):self.begin(j)
  def native_setup(self,outside=False):
-  self.generate();r=load(self.p)['revisions']['v1'];p=json.loads((self.p/r['spec']).read_text());Image.new('RGBA',(20,20),'green').save(self.p/'replacement.png');(self.p/'native-request.txt').write_text('TEST: replace product source with green fixture, keep other pixels',encoding='utf-8')
+  self.generate();r=load(self.p)['revisions']['v1'];p=json.loads((self.p/r['spec']).read_text(encoding='utf-8'));Image.new('RGBA',(20,20),'green').save(self.p/'replacement.png');(self.p/'native-request.txt').write_text('TEST: replace product source with green fixture, keep other pixels',encoding='utf-8')
   w.perform(self.p,'requirement',{'id':'new-source','scope':'product','property':'identity','text':'产品采用新的绿色测试原件','verification':'source compare','method':'composite','supersedes':['product-lock'],'source':{'kind':'test','quote':'TEST: replace product source with green fixture, keep other pixels'},'evidence_files':['native-request.txt']})
   p['elements'][1]['source']='replacement.png';p['elements'][1]['edit_authorization']={'reason':'explicit fixture replacement of product only','evidence_file':'native-request.txt','regions':[{'id':'product','rect':[.1,.1,.4,.4]}]};p['editable_regions']=[{'id':'scope','rect':[.6,.1,.9,.5] if outside else [.1,.1,.4,.4]}];atomic(self.p/'native.json',p)
   from blueprint import preview

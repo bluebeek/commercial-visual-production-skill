@@ -39,3 +39,7 @@ prepare-compose复用已有局部生成结果来修复合成参数：输入id、
 prepare-source用于准确文字/原件层的确定性替换：先保存新的真实源文件与对应用户要求，更新受影响R1/R2及其真实决定；输入id、baseline、spec、goal、layer_updates(实际替换元素ID)、intent_review(当前要求ID覆盖、unresolved空数组和实际核对说明)。只允许同尺寸、同布局的原件层替换，保护对象需要明确子区域授权证据。materialize真正重组并拒绝范围外变化，随后正常登记/核验；不增加AI调用。当前不会自行创建原生PSD文字层。
 
 cancel仅取消未执行的waiting_execution任务，须带job_id/reason；工具未调用时不计入预算。running任务中断后先核对真实工具记录再finish，不能盲目重放。
+
+## V3.1 PhotoCraft通路
+
+确定性矩形编辑和外部引擎验收按 [PhotoCraft契约](photocraft.md) 执行。生成与编辑分开计数；新项目必须有当前editor机器检查。ORA支持平面裁切层的画布内偏移，逐层内容和合成结果均须一致；引擎通过不扩展为桌面GUI兼容。

@@ -68,6 +68,7 @@ def asset(s,root,d):
     for key in ('path','role','description','description_source'):
         if not isinstance(d.get(key),str) or not d[key].strip(): raise WorkflowError('asset needs '+key)
     if d['description_source'] not in ('user','observed','test'): raise WorkflowError('invalid description source')
+    if d['description_source']=='test' and not s['test_mode']: raise WorkflowError('test asset descriptions require a test project')
     rec={k:d.get(k,[]) for k in ('must_keep','allowed_changes')}
     rec.update({k:d[k] for k in ('id','path','role','description','description_source')});rec['files']=bind(root,[d['path']])
     s['assets'][aid]=rec
@@ -81,6 +82,7 @@ def requirement(s,root,d):
         if not isinstance(d.get(key),str) or not d[key].strip(): raise WorkflowError('requirement needs '+key)
     source=d.get('source',{})
     if source.get('kind') not in ('user','brand','translation','test') or not source.get('quote'): raise WorkflowError('requirement must retain actual source wording')
+    if source['kind']=='test' and not s['test_mode']: raise WorkflowError('test requirements require a test project')
     files=bind(root,d.get('evidence_files',[]))
     if not files: raise WorkflowError('requirement needs source evidence')
     if source.get('kind')=='translation':

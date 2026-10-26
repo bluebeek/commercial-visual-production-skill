@@ -13,7 +13,7 @@ for item in manifest["files"]:
     if hashlib.sha256(source.read_bytes()).hexdigest() != item["sha256"]:
         raise SystemExit("Source checksum mismatch: " + item["path"])
     files.append(source)
-for name in ("README.md", "README.en.md", "VALIDATION.md", "CHANGELOG.md", "LICENSE", "requirements.txt", "SOURCE_MANIFEST.json"):
+for name in ("README.md", "README.en.md", "VALIDATION.md", "CHANGELOG.md", "LICENSE", "requirements.txt", "SOURCE_MANIFEST.json", "validation/round2/REPORT.md"):
     files.append(root / name)
 out = root / "dist"
 out.mkdir(exist_ok=True)

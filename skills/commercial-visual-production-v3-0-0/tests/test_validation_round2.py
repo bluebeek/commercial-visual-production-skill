@@ -143,6 +143,17 @@ class RoundTwo(Fixture):
         self.assertEqual(load(self.p)["checks"]["v2"]["non_target"]["status"],"PASS")
         self.assertEqual(w.qc(load(self.p),self.p,"v2")["status"],"BLOCK")
 
+    def test_noop_edit_requires_target_review_despite_zero_outside_change(self):
+        self.generate()
+        self.generate("j2","v2","v1")
+        self.generate("j3","v3","v2")
+        self.all_checks("v3")
+        detail=load(self.p)["checks"]["v3"]["non_target"]["detail"]
+        self.assertEqual(detail["inside_changed"],0)
+        self.assertEqual(detail["outside_changed"],0)
+        self.review_status("v3","target","UNKNOWN")
+        self.assertEqual(w.qc(load(self.p),self.p,"v3")["status"],"BLOCK")
+
     def test_seam_failure_blocks_even_when_target_and_pixels_pass(self):
         self.generate()
         self.generate("j2","v2","v1")
@@ -218,12 +229,17 @@ class RoundTwo(Fixture):
         self.assertEqual(resumed["kind"],"full")
         self.assertEqual(next(x["text"] for x in resumed["context"]["requirements"] if x["id"]=="exact-copy"),copy_text)
 
-    def test_eight_assets_retain_distinct_ids_roles_and_sources(self):
+    def test_two_five_eight_assets_retain_distinct_ids_roles_and_sources(self):
         for n in range(2,9):
             name="asset"+str(n)
             Image.new("RGBA",(20,20),(n*20,30,50,255)).save(self.p/(name+".png"))
             w.perform(self.p,"asset",dict(id=name,path=name+".png",role="test-role-"+str(n),
                 description="Synthetic role fixture "+str(n),description_source="test"))
+            if n in (2,5,8):
+                with self.subTest(asset_count=n):
+                    assets=load(self.p)["assets"]
+                    self.assertEqual(len(assets),n)
+                    self.assertEqual(len({tuple(a["files"].values()) for a in assets.values()}),n)
         s=load(self.p)
         self.assertEqual(len(s["assets"]),8)
         self.assertEqual(len({tuple(a["files"].values()) for a in s["assets"].values()}),8)
@@ -257,6 +273,14 @@ class RoundTwo(Fixture):
         with self.assertRaises(WorkflowError):
             w.perform(root,"asset",dict(id="test-asset",path="product.png",role="product",
                 description="Test-only source",description_source="test"))
+
+    def test_legacy_commercial_test_sources_block_current_context(self):
+        # Emulate a saved non-test project created before the origin guard existed.
+        transact(self.p,lambda s,r:s.update(test_mode=False))
+        state=ctx.build(self.p)["context"]
+        self.assertEqual(state["status"],"BLOCK")
+        self.assertIn("asset:product",state["test_sources"])
+        self.assertIn("requirement:blue",state["test_sources"])
 
     def test_real_source_kinds_remain_available_in_commercial_project(self):
         root=self.commercial_root()

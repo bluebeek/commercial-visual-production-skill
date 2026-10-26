@@ -29,7 +29,7 @@ def main():
     files={}
     for f in sorted(repo.rglob("*")):
         if f.is_file() and ".git" not in f.parts and "__pycache__" not in f.parts and not f.is_relative_to(out):
-            if any(p in ("validation-results",) for p in f.relative_to(repo).parts):continue
+            if any(p in ("validation-results","dist") for p in f.relative_to(repo).parts):continue
             files[f.relative_to(repo).as_posix()]=hashlib.sha256(f.read_bytes()).hexdigest()
     (out/"source-manifest.json").write_text(json.dumps(files,indent=2),encoding="utf-8")
     print(json.dumps(summary,ensure_ascii=False))

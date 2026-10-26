@@ -2,6 +2,8 @@
 
 版本 / Version: **3.0.0** · 验证日期 / Validation date: **2026-10-23**
 
+> 下述 2026-10-23 记录保留为发布历史。2026-10-26 开发候选的零调用验证、修复、65 文件清单及未完成项见 [第二轮报告](validation/round2/REPORT.md)。原 ZIP 校验值不适用于开发候选。
+
 ## 自动测试 / Automated checks
 
 | 项目 / Check | 结果 / Result |

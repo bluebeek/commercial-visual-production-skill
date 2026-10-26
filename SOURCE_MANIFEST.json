@@ -168,8 +168,8 @@
     },
     {
       "path": "references/stages.md",
-      "bytes": 4919,
-      "sha256": "1fbf07ca54a40514a7f3497f9c05cc0639616929f62ab1b4e43d903eb425c213"
+      "bytes": 5337,
+      "sha256": "41f63c1f208629ef0d09bde826194251638d68384d3bf535b56a2c1d70ca70cb"
     },
     {
       "path": "scripts/_common.py",
@@ -198,8 +198,8 @@
     },
     {
       "path": "scripts/_workflow.py",
-      "bytes": 7278,
-      "sha256": "9e45396e2f4bb894e4c2fc2e352e8f15ba56a781a8969c6fa51159ddc414a8e9"
+      "bytes": 7604,
+      "sha256": "1fa6d6a6a04f16c0f9b42c682853bc653e9a25fbc33eebf34a5a2c51b0f1fb0e"
     },
     {
       "path": "scripts/blueprint.py",
@@ -288,8 +288,8 @@
     },
     {
       "path": "scripts/workflow.py",
-      "bytes": 22714,
-      "sha256": "bf71d3678eecfe927ebf745c41063566dfe81fb9d80abf2128610a502d89b727"
+      "bytes": 22965,
+      "sha256": "cf55342d0b214a84e3b58cea77065a70d68ff7295af0f1149da13cbdb3e18e4f"
     },
     {
       "path": "SKILL.md",
@@ -298,13 +298,18 @@
     },
     {
       "path": "tests/test_feedback_v3.py",
-      "bytes": 7646,
-      "sha256": "020f68783cfa99256c7be7abc10b03936ca0eb3e5d761cac417fdd6b7b655c99"
+      "bytes": 7678,
+      "sha256": "e205075c3a1a7bd9a70778ed14b88c8f680baa50f9a92d20770ae65922165097"
     },
     {
       "path": "tests/test_integration_v3.py",
       "bytes": 4924,
       "sha256": "97be03dabd6397c0755c8e26d2d9b693a1a6fde88c3d48901da2a4b5249c29ef"
+    },
+    {
+      "path": "tests/test_validation_round2.py",
+      "bytes": 14931,
+      "sha256": "069312a8973ef31de61e2919f7ba519f5cd8ca1d9d718251517d89b4d70603f5"
     },
     {
       "path": "tests/test_workflow_v3.py",
@@ -313,8 +318,8 @@
     },
     {
       "path": "ui/app.js",
-      "bytes": 9138,
-      "sha256": "2087eaf5515cff7c0562a018e9ac0049bda7b77e042969aea4de8c623c26f8bc"
+      "bytes": 9144,
+      "sha256": "c4e6fcdf25ea1077b227580a463cd128bd13f9d9fbfa6c5109bc356f16917331"
     },
     {
       "path": "ui/index.html",

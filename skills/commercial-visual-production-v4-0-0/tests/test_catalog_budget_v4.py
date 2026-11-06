@@ -44,6 +44,12 @@ class Catalog(unittest.TestCase):
   text=GOOGLE.replace('for images.','for images. An update to gemini-3.1-flash-image.')
   self.refresh(text,'google')
   self.assertEqual(model_catalog.resolve(self.p,'google',clock=self.clock)['model'],'gemini-nano-banana-2.1')
+ def test_unrecognized_new_model_name_never_silently_keeps_older_model(self):
+  for provider,text in (
+   ('openai','## November, 2026\n### Nov 5\nReleased gpt-image-3.\n'+NOTES.split('\n',1)[1]),
+   ('google','## November 5, 2026\nReleased gemini-4-flash-image-preview.\n'+GOOGLE)):
+   self.refresh(text,provider)
+   with self.assertRaises(WorkflowError):model_catalog.resolve(self.p,provider,clock=self.clock)
 
 class Budget(unittest.TestCase):
  def setUp(self):

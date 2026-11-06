@@ -11,7 +11,7 @@ SOURCES = {
 }
 HOSTS = {'developers.openai.com', 'ai.google.dev', 'aistudio.google.com'}
 MONTHS = {m:i for i,m in enumerate(('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'),1)}
-MODEL_RE = re.compile(r'\b(?:gpt-image-\d+(?:\.\d+)*-(?:sunburst|flare)|gemini-(?:nano-banana-[\d.]+|[\d.]+-(?:flash(?:-lite)?|pro)-image))\b')
+MODEL_RE = re.compile(r'\b(?:gpt-image-\d+(?:[.-][a-z0-9]+)*|gemini-(?:nano-banana-[a-z0-9]+(?:[.-][a-z0-9]+)*|[a-z0-9]+(?:[.-][a-z0-9]+)*-image(?:-[a-z0-9]+)*))\b')
 
 class OfficialRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):

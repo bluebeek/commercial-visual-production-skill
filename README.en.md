@@ -1,5 +1,7 @@
 # Commercial Visual Production Skill V3.1.0
 
+> **V4 portability candidate (2026-11-06):** adds latest-model release discovery, official OpenAI/Google HTTP contracts, zero-call defaults, a shared budget ledger and project handoff. V3.1 remains the production baseline. Script/mock tests, actual host invocation and live generation are separate evidence categories. See the [V4 skill](skills/commercial-visual-production-v4-0-0/SKILL.md) and [versioned report](validation/v4/REPORT.md).
+
 [简体中文](README.md) · [Validation](VALIDATION.md) · [Release notes](CHANGELOG.md)
 
 A traceable workflow connecting reference analysis, project brand translation, creative blueprints, image production, review, targeted repairs, and PNG/ORA delivery. It is designed for assistant environments with local Skills, file access, Python, and the built-in image-generation tool. Project files retain active requirements, assets, version ancestry, issues, and user decisions. A resumed conversation reloads that state instead of relying on the model to remember the entire chat.

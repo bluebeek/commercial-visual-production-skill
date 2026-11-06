@@ -1,5 +1,7 @@
 # 商业视觉生产 Skill V3.1.0
 
+> **V4 通用化开发候选（2026-11-06）**：新增 latest 模型解析、OpenAI／Google 原生 HTTP 适配、零调用默认值、共享预算与项目移交。现有 V3.1 仍作为生产基线。V4 的程序／模拟接口测试与真实平台、生图验证分别报告；不会因为模型目录解析成功就声称已真实调用。入口见 [V4 Skill](skills/commercial-visual-production-v4-0-0/SKILL.md)，实际范围见 [V4 报告](validation/v4/REPORT.md)。
+
 [English](README.en.md) · [验证范围 / Validation](VALIDATION.md) · [发布说明 / Release notes](CHANGELOG.md)
 
 面向支持本地 Skill、文件操作、Python、PhotoCraft MCP及独立图像生成工具的助理环境，将参考解析、品牌转译、创意蓝图、视觉生产、核验、定向修复与 PNG/ORA 交付连接为可追溯流程。项目文件保存当前有效要求、素材、父子版本、问题与用户决定；恢复会话时重新读取状态，而不是依赖模型记住整个聊天。

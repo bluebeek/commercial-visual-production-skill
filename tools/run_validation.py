@@ -11,7 +11,7 @@ def main():
     skill=repo/"skills/commercial-visual-production-v3-1-0"
     env=dict(os.environ,PYTHONUTF8="1",PYTHONDONTWRITEBYTECODE="1")
     results=[]
-    for name,cwd in (("v3",skill),("v2",skill/"compat/v2")):
+    for name,cwd in (("v3",skill),("v2",skill/"compat/v2"),("v4",repo/"skills/commercial-visual-production-v4-0-0")):
         start=time.monotonic()
         r=subprocess.run([sys.executable,"-m","unittest","discover","-s","tests","-v"],
                          cwd=cwd,env=env,capture_output=True,encoding="utf-8",errors="replace")

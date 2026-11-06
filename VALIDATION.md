@@ -81,3 +81,6 @@ SHA-256: `fb0e1514b060544c55b34a4aea68ff7bfbb771243cbf3c4cb701d1b41538e490`
 该 ZIP 只包含已验证的 64 个技能文件；仓库根目录说明另行提供。
 
 This ZIP contains only the 64 verified Skill files. Repository-root documentation is supplied separately.
+# V4 开发候选说明（2026-11-06）
+
+V4 的 latest 解析、官方接口模拟、共享预算、版本隔离、迁移及安装包验证见 [独立报告](validation/v4/REPORT.md)。真实生图为 0；模型质量、跨宿主完整执行及本轮 PhotoCraft 实际调用不以模拟结果代证。以下历史内容继续属于各自版本。
